@@ -1,0 +1,778 @@
+{
+  "info": {
+    "_postman_id": "a_unique_id_for_this_collection",
+    "name": "RPMS Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "User Registration",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"RESEARCHER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register",
+                ""
+              ]
+            },
+            "description": "Registers a new user."
+          },
+          "response": []
+        },
+        {
+          "name": "User Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login",
+                ""
+              ]
+            },
+            "description": "Logs in a user and returns access and refresh tokens."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/me/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "me",
+                ""
+              ]
+            },
+            "description": "Retrieves details of the currently authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Google Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_token\": \"your_firebase_id_token_here\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/google-login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "google-login",
+                ""
+              ]
+            },
+            "description": "Authenticates a user with Google Firebase ID token and returns access and refresh tokens."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin Application",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin_app/users/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin_app",
+                "users",
+                ""
+              ]
+            },
+            "description": "Retrieves a list of all users."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ACTIVE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin_app/updateusers/:username/status/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin_app",
+                "updateusers",
+                ":username",
+                "status",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "username",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Updates the status of a specific user. Status must be one of: 'ACTIVE', 'FROZEN', 'INACTIVE'."
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Research Paper",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"New Research Paper\",\n  \"abstract\": \"This is an abstract of the new paper.\",\n  \"assigned_to\": \"researcher_username\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin_app/paperworks/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin_app",
+                "paperworks",
+                ""
+              ]
+            },
+            "description": "Assigns a new research paper."
+          },
+          "response": []
+        },
+        {
+          "name": "Review Submission",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\",\n  \"comments\": \"Great work!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/paperworks/:id/review/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paperworks",
+                ":id",
+                "review",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Creates a new review for a paper submission. Status must be one of: 'ASSIGNED', 'SUBMITTED', 'CHANGES_REQUESTED', 'APPROVED'."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "API Application",
+      "item": [
+        {
+          "name": "Get All Paperworks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/paperworks/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paperworks",
+                ""
+              ]
+            },
+            "description": "Retrieves a list of all paperworks."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Paperwork",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/paperworks/:id/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paperworks",
+                ":id",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieves details of a specific paperwork."
+          },
+          "response": []
+        },
+        {
+          "name": "Submit New Version of Paperwork",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "paper_pdf",
+                  "type": "file",
+                  "src": "",
+                  "description": "PDF file (required)"
+                },
+                {
+                  "key": "latex_tex",
+                  "type": "file",
+                  "src": "",
+                  "description": "LaTeX file (required)"
+                },
+                {
+                  "key": "python_zip",
+                  "type": "file",
+                  "src": "",
+                  "description": "Python code as ZIP file (required)"
+                },
+                {
+                  "key": "docx_file",
+                  "type": "file",
+                  "src": "",
+                  "description": "DOCX file (optional)"
+                },
+                {
+                  "key": "ai_percent_self",
+                  "value": "0.0",
+                  "type": "text",
+                  "description": "Self-reported AI percentage (optional)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/paperworks/:id/versions/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paperworks",
+                ":id",
+                "versions",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Submits a new version for an existing paperwork. Requires multipart form data with file uploads."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Versions of Paperwork",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/paperworks/:id/versions/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paperworks",
+                ":id",
+                "versions",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieves all versions of a specific paperwork."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Paper Work",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/paperworks/:id/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paperworks",
+                ":id",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Deletes a paperwork. Only available to researchers who own the paperwork."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Specific Version of Paperwork",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/paperworks/:id/versions/:version_id/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paperworks",
+                ":id",
+                "versions",
+                ":version_id",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                },
+                {
+                  "key": "version_id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieves a specific version of a paperwork."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Paperwork Reviews",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/paperworks/:id/reviews/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paperworks",
+                ":id",
+                "reviews",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieves all reviews for a specific paperwork."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Specific Paperwork Review",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/paperworks/:id/reviews/:review_id/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "paperworks",
+                ":id",
+                "reviews",
+                ":review_id",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                },
+                {
+                  "key": "review_id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieves a specific review for a paperwork."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Summary Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/summary/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "summary",
+                ""
+              ]
+            },
+            "description": "Retrieves a summary report of paperworks by status."
+          },
+          "response": []
+        },
+        {
+          "name": "Export Report to CSV",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/reports/export.csv/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "export.csv",
+                ""
+              ]
+            },
+            "description": "Exports paperwork data to a CSV file."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "notifications",
+                ""
+              ]
+            },
+            "description": "Retrieves all notifications for the authenticated user."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Notification as Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/:id/read/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "notifications",
+                ":id",
+                "read",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Marks a specific notification as read."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Researcher Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/stats/researcher/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "stats",
+                "researcher",
+                ""
+              ]
+            },
+            "description": "Gets statistics for the current researcher, including counts of paperworks by status."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "admin_access_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

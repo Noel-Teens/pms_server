@@ -1,0 +1,59 @@
+# ======================
+# Python / Django
+# ======================
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+*.pot
+*.pyc
+*.pyo
+
+# Local database (don’t commit dev DB)
+db.sqlite3
+*.sqlite3
+
+# Media & static (collected/served at runtime)
+media/
+paperworks/
+staticfiles/
+static/
+
+# Migrations (only keep __init__.py so Django can detect the package)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Secrets / environment configs
+.env
+*.env
+.env.*
+secrets.json
+
+# ======================
+# Docker / Hugging Face
+# ======================
+*.pid
+*.seed
+*.bak
+*.backup
+*.tar
+*.gz
+*.tmp
+
+# Keep Dockerfile & docker-compose.yml for Hugging Face build
+!Dockerfile
+!docker-compose.yml
+
+# ======================
+# Editor / IDE / System
+# ======================
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# ======================
+# Firebase Services
+# ======================
+paper-ms-firebase-adminsdk-fbsvc-5bcb4de51e.json

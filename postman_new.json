@@ -1,0 +1,221 @@
+{
+  "info": {
+    "_postman_id": "a_unique_id_for_this_collection",
+    "name": "Paper Management System API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Admin Endpoints",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"researcher1\",\n    \"password\": \"securepass123\",\n    \"email\": \"researcher1@example.com\",\n    \"role\": \"RESEARCHER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin_app/createusers/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin_app",
+                "createusers",
+                ""
+              ]
+            },
+            "description": "Create a new user (requires admin privileges)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"status\": \"ACTIVE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin_app/updateusers/:username/status/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin_app",
+                "updateusers",
+                ":username",
+                "status",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "username",
+                  "value": "researcher1"
+                }
+              ]
+            },
+            "description": "Update user status (ACTIVE, FROZEN, INACTIVE)"
+          },
+          "response": []
+        },
+        {
+          "name": "Assign Paperwork",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Research on AI Ethics\",\n    \"researcher_id\": \"uuid-of-researcher\",\n    \"deadline\": \"2025-12-31T23:59:59Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin_app/paperworks/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin_app",
+                "paperworks",
+                ""
+              ]
+            },
+            "description": "Assign a new paperwork to a researcher"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Paperwork Deadline",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"deadline\": \"2025-12-31T23:59:59Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/admin_app/paperworks/:id/deadline/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin_app",
+                "paperworks",
+                ":id",
+                "deadline",
+                ""
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "paperwork-uuid"
+                }
+              ]
+            },
+            "description": "Update the deadline of a paperwork"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin_app/users/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin_app",
+                "users",
+                ""
+              ]
+            },
+            "description": "Retrieves a list of all users."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string",
+      "description": "Base URL for the API"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string",
+      "description": "JWT access token for authentication"
+    }
+  ]
+}
