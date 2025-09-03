@@ -8,11 +8,11 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
 from django.contrib.auth import get_user_model
-from auth_app.utils import IsAdmin, IsNotFrozen
+from auth_app.utils import IsAdmin
 from auth_app.models import User
 from .models import PaperWork
-from .serializers import PaperWorkSerializer, PaperWorkStatusUpdateSerializer, PaperWorkDeadlineUpdateSerializer
-from auth_app.serializers import UserSerializer
+from .serializers import PaperWorkSerializer, PaperWorkDeadlineUpdateSerializer
+from auth_app.serializers import UserRegistrationSerializer, UserSerializer
 from api.models import Version
 from django.conf import settings
 import os
@@ -47,7 +47,7 @@ def _auth_from_query_token(request):
 @csrf_exempt
 def create_user(request):
     
-    serializer = UserSerializer(data=request.data)
+    serializer = UserRegistrationSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
