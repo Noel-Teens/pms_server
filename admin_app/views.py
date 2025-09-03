@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.views.decorators.clickjacking import xframe_options_exempt
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import get_user_model
 from auth_app.utils import IsAdmin
 from auth_app.models import User
@@ -18,7 +20,7 @@ from django.conf import settings
 import os
 import zipfile
 import base64
-from django.http import FileResponse, Http404, JsonResponse
+from django.http import FileResponse, Http404, JsonResponse, HttpResponseNotFound
 
 def _auth_from_query_token(request):
     token = getattr(request, "query_params", {}).get("token") or request.GET.get("token")
@@ -318,3 +320,43 @@ def view_zip_file_content(request, paperwork_id, version_no, file_path):
                 })
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+def download_paperwork_file(request, pk, version_no, file_type):
+    # Try token auth first
+    token = request.GET.get("token")
+    if token:
+        jwt_auth = JWTAuthentication()
+        try:
+            validated_token = jwt_auth.get_validated_token(token)
+            user = jwt_auth.get_user(validated_token)
+            request.user = user
+        except Exception:
+            raise AuthenticationFailed("Invalid token")
+
+    if not request.user or not request.user.is_authenticated:
+        return Response({"detail": "Authentication credentials were not provided."}, status=401)
+
+    paperwork = get_object_or_404(PaperWork, pk=pk)
+    version = get_object_or_404(paperwork.versions, version_no=version_no)
+    # Map file_type string to the correct model field
+    path_map = {
+        "pdf": getattr(version, "pdf_path", None),
+        "docx": getattr(version, "docx_path", None),
+        "tex": getattr(version, "latex_path", None),
+        "python": getattr(version, "python_path", None),
+        "zip": getattr(version, "zip_path", None),
+    }
+
+    rel_path = path_map.get(file_type)
+    if not rel_path:
+        return HttpResponseNotFound(f"Unsupported file type: {file_type}")
+
+    # Build absolute path
+    file_path = os.path.join(settings.MEDIA_ROOT, rel_path)
+
+    if not os.path.exists(file_path):
+        return HttpResponseNotFound("File not found on disk")
+
+    response = FileResponse(open(file_path, "rb"), content_type="application/octet-stream")
+    response["Content-Disposition"] = f"attachment; filename={os.path.basename(file_path)}"
+    return response

@@ -11,4 +11,5 @@ urlpatterns = [
     path('paperworks/<uuid:paperwork_id>/versions/<int:version_no>/<str:file_type>/view/', views.view_paperwork_file, name='view_paperwork_file'),
     path('paperworks/<uuid:paperwork_id>/versions/<int:version_no>/zip-contents/', views.view_zip_contents, name='view_zip_contents'),
     path('paperworks/<uuid:paperwork_id>/versions/<int:version_no>/zip-file/<path:file_path>/', views.view_zip_file_content, name='view_zip_file_content'),
+    path("paperworks/<uuid:pk>/versions/<int:version_no>/<str:file_type>/download/", views.download_paperwork_file, name="download_paperwork_file")
 ]
